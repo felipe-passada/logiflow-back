@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: logiflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db:/var/lib/postgresql:z
+
+volumes:
+  db:
+    driver: local
+
+#networks:
+#  shared-infra:
+#    driver: bridge
