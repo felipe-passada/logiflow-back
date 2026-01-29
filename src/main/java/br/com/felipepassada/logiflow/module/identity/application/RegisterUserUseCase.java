@@ -29,11 +29,8 @@ public class RegisterUserUseCase {
             throw new RuntimeException("Utilizador já existe com este email");
         }
 
-        // 1. Cifra a senha
         String hashedPassword = passwordHasher.hash(rawPassword);
 
-        // 2. Cria a entidade de Domínio (usando seu Value Object)
-        // Aqui você pode adicionar um construtor na sua classe User para facilitar
         User user = new User(
                 UUID.randomUUID(),
                 email,
@@ -42,7 +39,6 @@ public class RegisterUserUseCase {
                 true
         );
 
-        // 3. Converte para JPA e guarda
         var jpaEntity = userMapper.toJpa(user);
         userRepository.save(jpaEntity);
 
