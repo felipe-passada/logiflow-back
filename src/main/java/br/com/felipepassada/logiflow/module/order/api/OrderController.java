@@ -5,6 +5,7 @@ import br.com.felipepassada.logiflow.module.order.api.dtos.response.OrderRespons
 import br.com.felipepassada.logiflow.module.order.application.AcceptOrderUseCase;
 import br.com.felipepassada.logiflow.module.order.application.CreateOrderUseCase;
 import br.com.felipepassada.logiflow.module.order.application.ListPendingOrdersUseCase;
+import br.com.felipepassada.logiflow.module.order.application.StartOrderDeliveryUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,13 @@ public class OrderController {
     private final CreateOrderUseCase createOrderUseCase;
     private final ListPendingOrdersUseCase listPendingOrdersUseCase;
     private final AcceptOrderUseCase acceptOrderUseCase;
+    private final StartOrderDeliveryUseCase startOrderDeliveryUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase, ListPendingOrdersUseCase listPendingOrdersUseCase, AcceptOrderUseCase acceptOrderUseCase) {
+    public OrderController(CreateOrderUseCase createOrderUseCase, ListPendingOrdersUseCase listPendingOrdersUseCase, AcceptOrderUseCase acceptOrderUseCase, StartOrderDeliveryUseCase startOrderDeliveryUseCase) {
         this.createOrderUseCase = createOrderUseCase;
         this.listPendingOrdersUseCase = listPendingOrdersUseCase;
         this.acceptOrderUseCase = acceptOrderUseCase;
+        this.startOrderDeliveryUseCase = startOrderDeliveryUseCase;
     }
 
     @PostMapping
@@ -42,6 +45,18 @@ public class OrderController {
     @PatchMapping("/{id}/accept")
     public ResponseEntity<Void> acceptOrder(@PathVariable UUID id) {
         acceptOrderUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<Void> startDelivery(@PathVariable UUID id) {
+        startOrderDeliveryUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Void> completeDelivery(@PathVariable UUID id) {
+        startOrderDeliveryUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
 }
