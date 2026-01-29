@@ -21,6 +21,9 @@ public class OrderMapper {
         jpa.setOriginAddress(toAddressEmbeddable(order.getOriginAddress()));
         jpa.setDestinationAddress(toAddressEmbeddable((order.getDestinationAddress())));
         jpa.setCreatedAt(LocalDateTime.now());
+        jpa.setAcceptedAt(order.getAcceptedAt());
+        jpa.setDeliveredAt(order.getDeliveryAt());
+        jpa.setDriverId(order.getDriverId());
         return jpa;
     }
 
@@ -33,7 +36,9 @@ public class OrderMapper {
                 jpa.getWeight(),
                 toAddressDomain(jpa.getOriginAddress()),
                 toAddressDomain(jpa.getDestinationAddress()),
-                jpa.getStatus()
+                jpa.getStatus(),
+                jpa.getAcceptedAt(),
+                jpa.getDeliveredAt()
         );
     }
 

@@ -2,10 +2,7 @@ package br.com.felipepassada.logiflow.module.order.api;
 
 import br.com.felipepassada.logiflow.module.order.api.dtos.request.CreateOrderRequestDto;
 import br.com.felipepassada.logiflow.module.order.api.dtos.response.OrderResponseDto;
-import br.com.felipepassada.logiflow.module.order.application.AcceptOrderUseCase;
-import br.com.felipepassada.logiflow.module.order.application.CreateOrderUseCase;
-import br.com.felipepassada.logiflow.module.order.application.ListPendingOrdersUseCase;
-import br.com.felipepassada.logiflow.module.order.application.StartOrderDeliveryUseCase;
+import br.com.felipepassada.logiflow.module.order.application.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +18,14 @@ public class OrderController {
     private final ListPendingOrdersUseCase listPendingOrdersUseCase;
     private final AcceptOrderUseCase acceptOrderUseCase;
     private final StartOrderDeliveryUseCase startOrderDeliveryUseCase;
+    private final CompleteOrderDeliveryUseCase completeOrderDeliveryUseCase;
 
-    public OrderController(CreateOrderUseCase createOrderUseCase, ListPendingOrdersUseCase listPendingOrdersUseCase, AcceptOrderUseCase acceptOrderUseCase, StartOrderDeliveryUseCase startOrderDeliveryUseCase) {
+    public OrderController(CreateOrderUseCase createOrderUseCase, ListPendingOrdersUseCase listPendingOrdersUseCase, AcceptOrderUseCase acceptOrderUseCase, StartOrderDeliveryUseCase startOrderDeliveryUseCase, CompleteOrderDeliveryUseCase completeOrderDeliveryUseCase) {
         this.createOrderUseCase = createOrderUseCase;
         this.listPendingOrdersUseCase = listPendingOrdersUseCase;
         this.acceptOrderUseCase = acceptOrderUseCase;
         this.startOrderDeliveryUseCase = startOrderDeliveryUseCase;
+        this.completeOrderDeliveryUseCase = completeOrderDeliveryUseCase;
     }
 
     @PostMapping
@@ -56,7 +55,7 @@ public class OrderController {
 
     @PatchMapping("/{id}/complete")
     public ResponseEntity<Void> completeDelivery(@PathVariable UUID id) {
-        startOrderDeliveryUseCase.execute(id);
+        completeOrderDeliveryUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,9 +1,9 @@
 package br.com.felipepassada.logiflow.module.order.domain;
 
-import br.com.felipepassada.logiflow.module.common.domain.exception.DomainException;
 import br.com.felipepassada.logiflow.module.order.domain.exception.OrderStatusException;
 import br.com.felipepassada.logiflow.module.order.domain.valueObjects.Address;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Order {
@@ -15,6 +15,8 @@ public class Order {
     private Address originAddress;
     private Address destinationAddress;
     private OrderStatus status;
+    private LocalDateTime acceptedAt;
+    private LocalDateTime deliveryAt;
 
     public Order(UUID id, UUID customerId, UUID driverId, String description, Double weight, Address originAddress, Address destinationAddress) {
         if (originAddress.equals(destinationAddress)) {
@@ -30,7 +32,10 @@ public class Order {
         this.status = OrderStatus.WAITING_FOR_DRIVER;
     }
 
-    public Order(UUID id, UUID customerId, UUID driverId, String description, Double weight, Address originAddress, Address destinationAddress, OrderStatus status) {
+    public Order(UUID id, UUID customerId, UUID driverId,
+                 String description, Double weight, Address originAddress,
+                 Address destinationAddress, OrderStatus status, LocalDateTime acceptedAt,
+                 LocalDateTime deliveryAt) {
         this.id = id;
         this.customerId = customerId;
         this.driverId = driverId;
@@ -39,6 +44,8 @@ public class Order {
         this.originAddress = originAddress;
         this.destinationAddress = destinationAddress;
         this.status = status;
+        this.acceptedAt = acceptedAt;
+        this.deliveryAt = deliveryAt;
     }
 
     public void acceptOrder(UUID driverId) {
@@ -47,6 +54,15 @@ public class Order {
         }
         this.driverId = driverId;
         this.status = OrderStatus.PICKING_UP;
+        this.acceptedAt = LocalDateTime.now();
+    }
+
+    public void delivered() {
+        if (this.status != OrderStatus.IN_TRANSIT) {
+            throw new OrderStatusException("Order cannot be delivered in its current status: " + this.status);
+        }
+        this.status = OrderStatus.DELIVERED;
+        this.deliveryAt = LocalDateTime.now();
     }
 
     public UUID getId() {
@@ -111,5 +127,21 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public LocalDateTime getAcceptedAt() {
+        return acceptedAt;
+    }
+
+    public void setAcceptedAt(LocalDateTime acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public LocalDateTime getDeliveryAt() {
+        return deliveryAt;
+    }
+
+    public void setDeliveryAt(LocalDateTime deliveryAt) {
+        this.deliveryAt = deliveryAt;
     }
 }

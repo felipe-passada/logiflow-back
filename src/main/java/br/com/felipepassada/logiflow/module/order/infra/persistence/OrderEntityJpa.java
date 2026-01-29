@@ -56,11 +56,19 @@ public class OrderEntityJpa {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "accepted_at")
+    private LocalDateTime acceptedAt;
+    @Column(name = "delivered_at")
+    private LocalDateTime deliveredAt;
+
     public OrderEntityJpa() {
 
     }
 
-    public OrderEntityJpa(UUID id, UUID customerId, UUID driverId, String description, Double weight, AddressEmbeddable originAddress, AddressEmbeddable destinationAddress, OrderStatus status) {
+    public OrderEntityJpa(UUID id, UUID customerId, UUID driverId,
+                          String description, Double weight, AddressEmbeddable originAddress,
+                          AddressEmbeddable destinationAddress, OrderStatus status, LocalDateTime acceptedAt,
+                          LocalDateTime deliveredAt) {
         this.id = id;
         this.customerId = customerId;
         this.driverId = driverId;
@@ -70,6 +78,8 @@ public class OrderEntityJpa {
         this.destinationAddress = destinationAddress;
         this.status = status;
         this.createdAt = LocalDateTime.now();
+        this.acceptedAt = acceptedAt;
+        this.deliveredAt = deliveredAt;
     }
 
     public UUID getId() {
@@ -142,5 +152,21 @@ public class OrderEntityJpa {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getAcceptedAt() {
+        return acceptedAt;
+    }
+
+    public void setAcceptedAt(LocalDateTime acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
+    }
+
+    public void setDeliveredAt(LocalDateTime deliveredAt) {
+        this.deliveredAt = deliveredAt;
     }
 }
