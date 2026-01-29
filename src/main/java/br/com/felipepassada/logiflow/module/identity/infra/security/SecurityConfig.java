@@ -25,6 +25,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/drivers/pending").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/drivers/*/approve").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/orders/*/accept").hasRole("DRIVER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/orders/*/start").hasRole("DRIVER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/orders/*/complete").hasRole("DRIVER")
+
 
                         .anyRequest().permitAll()
                 )
